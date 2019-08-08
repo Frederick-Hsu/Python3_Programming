@@ -117,4 +117,21 @@ print("\ni.e. radius is ", cmath.polar(complnum)[0], ", theta is ", math.degrees
 print("\n====================================================\n")
 
 # Decimal digits
+import decimal
 
+decimal_a = decimal.Decimal(-6523845)
+decimal_b = decimal.Decimal("25364.025412698730254690256")
+print(decimal_a, " + ", decimal_b, " = ", decimal_a + decimal_b)
+
+def decimal_equal(deciaml_a, decimal_b):
+    if type(deciaml_a) == decimal.Decimal and type(decimal_b) == decimal.Decimal:
+        if (deciaml_a == decimal_b):
+            return True
+        else:
+            return False
+    else:
+        return False
+
+print("\nConvert float ", 2650.2365147, " to decimal.Decimal : ", decimal.Decimal.from_float(2650.2365147), "\n")
+print(23, "/", 1.05, " = ", 23/1.05)
+print("\ndecimal.Decimal(23) / decimal.Decimal('1.05') = ", decimal.Decimal(23) / decimal.Decimal('1.05'))
