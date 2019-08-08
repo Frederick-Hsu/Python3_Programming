@@ -94,3 +94,27 @@ circle_area = math.pi * pow(5, 2)
 print("\nThe area of a circle with radius 5 is : ", circle_area)
 print("\nA right-angled triangle, hook is 5, stock is 12, \naccording to the Pythagoras theory, its string is : ", math.hypot(5, 12))
 print("\nReturning the fractional and integer parts of ", 13.732, ", they are : ", math.modf(13.732))
+
+print("\n====================================================\n")
+
+# Complex number type
+z = -89.3 + 2.125j
+print("This complex number is : ", z)
+print("and his real part is : ", z.real, ", imag part is : ", z.imag)
+print("his conjugate is : ", z.conjugate())
+
+complex_number = complex(3, 4)
+print("\nThis complex number is : ", complex_number)
+
+import cmath
+print("\nThe phase of complex ", z, " is : ", cmath.phase(z))
+
+complnum = complex(1, 1) # complex(math.sqrt(3), 1.0)
+print("\nPhase of ", complnum, " is : ", math.degrees(cmath.phase(complnum)))
+print("\nConvert to the polar coordinate, complex number ", complnum, " is : ", (cmath.polar(complnum)))
+print("\ni.e. radius is ", cmath.polar(complnum)[0], ", theta is ", math.degrees(cmath.polar(complnum)[1]), " degree.")
+
+print("\n====================================================\n")
+
+# Decimal digits
+
