@@ -65,3 +65,32 @@ print("operand_x ^ operand_y = ", bin(operand_x ^ operand_y))   # XOR
 print("operand_x << 5 = ", bin(operand_x << 5))     # Bitwise Left Shift
 print("operand_y >> 5 = ", bin(operand_y >> 5))     # Bitwise Right Shift
 print("~operand_x = ", bin(~operand_x))                # Bitwise NOT
+
+print("\n====================================================\n")
+
+# Float type
+import decimal
+salutary = 0.0, 5.4, -2.5, 8.9e-6
+print("salutary = ", salutary)
+
+precise_pi = decimal.Decimal(3.14159267)
+print(precise_pi)
+
+import sys
+def equal_float(a, b):
+    return (abs(a - b) <= sys.float_info.epsilon)   # epsilon是机器可以区分出两个浮点数的最小区别
+
+# Display the detailed information about the function, class you want to query
+help(sys.float_info.epsilon)
+
+float_number = 14.25
+hex_float_string = float_number.hex()
+print("\nConvert float number ", float_number, " to hex string : ", hex_float_string)
+print("\nConvert hex float string ", hex_float_string, " back to float number : ", float.fromhex(hex_float_string))
+print("\nExpress the float number ", float_number, " as integer ratio : ", float.as_integer_ratio(float_number))
+
+import math
+circle_area = math.pi * pow(5, 2)
+print("\nThe area of a circle with radius 5 is : ", circle_area)
+print("\nA right-angled triangle, hook is 5, stock is 12, \naccording to the Pythagoras theory, its string is : ", math.hypot(5, 12))
+print("\nReturning the fractional and integer parts of ", 13.732, ", they are : ", math.modf(13.732))
