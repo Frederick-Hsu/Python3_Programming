@@ -45,7 +45,7 @@ print("The {animal} weights {weight}kg".format(**animal_weight))    # ** can spl
 
 print("\n==================================================================\n")
 
-# Converting the fields
+# Format convention
 import decimal
 decimal_number = decimal.Decimal("3.0259846")
 print(decimal_number)
@@ -98,3 +98,18 @@ print("{0:n} \t {1:n}".format(real, imag))
 
 locale.setlocale(locale.LC_ALL, "de_DE.UTF-8")
 print("{0:n} \t {1:n}".format(real, imag))
+
+import math
+amount = (10**3)*math.pi
+print("amount = {0}".format(amount))
+print("[{0:12.2e}]\t[{0:12.2f}]".format(amount))
+print("[{0:*>12.2e}]\t[{0:*>12.2f}]".format(amount))
+print("[{0:*>+12.2e}]\t[{0:*>+12.2f}]".format(amount))
+
+# Formatted output the decimal.Decimal number
+print("{0:,.6f}".format(decimal.Decimal("1234567890.123456789")))
+print("{0:,.6g}".format(decimal.Decimal("1234567890.123456789")))
+
+complex_number = 4.75917 - 1.2042j
+print("complex number = ({0.real:.3f}, {0.imag:+.3f}j5)".format(complex_number))
+print("{:,.4f}".format(3.59284e6 + 8.984327843e5j))
