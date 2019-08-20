@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 
+*.html
+
 # C extensions
 *.so
 
