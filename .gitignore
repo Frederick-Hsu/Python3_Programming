@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 
 *.html
+*.svg
+*.png
+*.css
+*.download
 
 # C extensions
 *.so
