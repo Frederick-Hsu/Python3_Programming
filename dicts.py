@@ -57,8 +57,30 @@ print("{green} {olive} {lime}".format(**greens))
 
 #==============================================================================
 print("\n")
+import collections
 
 import os
 file_sizes = {name: os.path.getsize(name) for name in os.listdir(".") if os.path.isfile(name)}
 for key, value in file_sizes.items():
     print("file_name = {0} \nfile_size = {1}\n".format(key, value))
+
+# generate the sorted dictionary
+# print(file_sizes.keys())
+files_dict = collections.OrderedDict(sorted(file_sizes.items()))
+print(files_dict)
+
+
+
+#==============================================================================
+# Ordered dictionary 
+print("\n")
+
+ordict = collections.OrderedDict([("z", -4), ("e", 19), ("k", 7)])
+print(ordict)
+
+tasks = collections.OrderedDict()
+tasks[8031] = "Backup"
+tasks[4027] = "Scan Email"
+tasks[5733] = "Build System"
+print(list(tasks.keys()))
+tasks[8031] = "Daily backup"
