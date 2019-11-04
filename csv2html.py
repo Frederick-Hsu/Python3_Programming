@@ -9,23 +9,6 @@
 
 import sys
 
-def main():
-    maxwidth = 100
-    print_start()
-    count = 0
-    while True:
-        try:
-            line = input()
-            if count == 0:
-                color = "lightgreen"
-            elif count % 2:
-                color = "white"
-            print_line(line, color, maxwidth)
-            count += 1
-        except EOFError:
-            break
-    print_end()
-
 def print_start():
     print("<table border = '1'>")
 
@@ -81,4 +64,22 @@ def escape_html(text):
     text = text.replace(">", "&gt;")
     return text
 
-main()
+def main():
+    maxwidth = 100
+    print_start()
+    count = 0
+    while True:
+        try:
+            line = input()
+            if count == 0:
+                color = "lightgreen"
+            elif count % 2:
+                color = "white"
+            print_line(line, color, maxwidth)
+            count += 1
+        except EOFError:
+            break
+    print_end()
+
+if __name__ == "__main__":
+    main()
