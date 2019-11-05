@@ -57,3 +57,63 @@ class FuzzyBool:
     
     def __format__(self, format_spec):
         return format(self.__value, format_spec)
+    
+    @staticmethod
+    def conjuction(*fuzzies):
+        return FuzzyBool(min([float(x) for x in fuzzies]))
+    
+    @staticmethod
+    def disjunction(*fuzzies):
+        return FuzzyBool(max([float(x) for x in fuzzies]))
+    
+    def __abs__(self):
+        return abs(self.__value)
+    
+    def __index__(self):
+        return bin(self.__value), oct(self.__value), hex(self.__value)
+    
+    def __pos__(self):
+        return +self.__value
+    
+    def __add__(self, other):
+        return self.__value + other.__value
+    
+    def __iadd__(self, other):
+        self.__value = self.__value + other.__value
+        return self
+    
+    def __rand__(self, other):
+        return other.__value + self.__value
+    
+    def __mul__(self, other):
+        return self.__value * other.__value
+    
+    def __imul__(self, other):
+        self.__value = self.__value * other.__value
+        return self
+    
+    def __rmul__(self, other):
+        return other.__value * self.__value
+    
+    def __floordiv__(self, other):
+        return self.__value // other.__value
+    
+    def __ifloordiv__(self, other):
+        self.__value = self.__value // other.__value
+        return self
+    
+    def __rfloordiv__(self, other):
+        return other.__value // self.__value
+    
+    def __divmod__(self, other):
+        return divmod(self.__value, other.__value)
+    
+    def __pow__(self, other):
+        return self.__value ** other.__value
+    
+    def __ipow__(self, other):
+        self.__value = self.__value ** other.__value
+        return self
+    
+    def __rpow(self, other):
+        return other.__value ** self.__value
