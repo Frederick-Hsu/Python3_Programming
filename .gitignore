@@ -8,6 +8,7 @@ __pycache__/
 *.css
 *.download
 *.txt
+*.img
 
 # C extensions
 *.so
