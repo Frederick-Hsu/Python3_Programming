@@ -43,8 +43,8 @@ class SortedList:
         else:
             self.__list.insert(index, value)
     
-    def __bisect_left(self, value):
-        key = self.__key(value)
+    def __bisect_left(self, value):     # __ presents that this method is a private method
+        key = self.__key(value)         # calculate the comparable key for the given value.
         left, right = 0, len(self.__list)
         while left < right:
             middle = (left + right)//2
@@ -55,7 +55,7 @@ class SortedList:
         return left
     
     def remove(self, value):
-        index = self.__bisect_left(value)
+        index = self.__bisect_left(value)       # Calculate the index to indicate which position this value locates
         if (index < len(self.__list)) and (self.__list[index] == value):
             del self.__list[index]
         else:
