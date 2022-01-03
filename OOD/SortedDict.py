@@ -105,6 +105,8 @@ class SortedDict(dict):
         super(SortedDict, d).update(self)
         d.__keys = self.__keys.copy()
         return d
+
+    __copy__ = copy
     
     def value_at(self, index):
         return self[self.__keys[index]]
