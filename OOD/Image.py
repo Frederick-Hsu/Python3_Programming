@@ -35,10 +35,10 @@ class Image:
     def __init__(self, width, height, filename = "", background = "#FFFFFF"):
         self.filename = filename
         self.__background = background
-        self.__data = {}
+        self.__data = {}    # key: the coordinate (x, y)
         self.__width = width
         self.__height = height
-        self.__colors = {self.__background}
+        self.__colors = {self.__background}     # value: color string
     
     @property
     def background(self):
@@ -122,3 +122,22 @@ class Image:
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
+
+    import Image
+
+    border_color = "#FF0000"    # red
+    square_color = "#0000FF"    # blue
+    width, height = 240, 65
+    midx, midy = width // 2, height // 2
+    # print("midx = {0}".format(midx))
+    # print("height // 2 = {0}".format(height // 2))
+    # print("height % 2 = {0}".format(height % 2))
+    image = Image.Image(width, height, "square_eye.img")
+    for col in range(width):
+        for row in range(height):
+            if col < 5 or col >= width-5 or row < 5 or row >= height-5:
+                image[col, row] = border_color
+            elif midx - 20 < col < midx + 20 and midy - 20 < row < midy + 20:
+                image[col, row] = square_color
+    image.save()
+    image.export("Square_eye.xpm")
