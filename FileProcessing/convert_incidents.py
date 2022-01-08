@@ -40,6 +40,11 @@ import pickle
 import gzip
 import os
 import sys
+import struct
+
+GZIP_MAGIC = b"\x1F\x8B"
+MAGIC = b"AIB\x00"
+FORMAT_VERSION = b"\x00\x01"
 
 class IncidentError(Exception):
     pass
@@ -153,8 +158,6 @@ class Incident:
         
         keys = __iter__
 
-        GZIP_MAGIC = b"\x1F\x8B"
-
         def export_pickle(self, filename, compress = False):
             fh = None
             try:
@@ -191,6 +194,40 @@ class Incident:
                 if fh is not None:
                     fh.close()
 
+        def export_binary(self, filename, compress=False):
+
+            def pack_string(string):
+                data = string.encode("utf8")
+                format = "<H{0}s".format(len(data))
+                return struct.pack(format, len(data), data)
+            
+            fh = None
+            try:
+                if compress:
+                    fh = gzip.open(filename, "wb")
+                else:
+                    fh = open(filename, "wb")
+                fh.write(MAGIC)
+                fh.write(FORMAT_VERSION)
+                for incident in self.values():
+                    data = bytearray()
+                    data.extend(pack_string(incident.report_id))
+                    data.extend(pack_string(incident.airport))
+                    data.extend(pack_string(incident.aircraft_id))
+                    data.extend(pack_string(incident.aircraft_type))
+                    data.extend(pack_string(incident.narrative.strip()))
+                    data.extend(NumbersStruct.pack(incident.date.toordinal(),
+                                                   incident.pilot_percent_hours_on_type,
+                                                   incident.pilot_total_hours,
+                                                   incident.midair))
+                    fh.write(data)
+                return True
+            except (EnvironmentError, struct.error) as err:
+                print("{0}: pack error: {1}".format(os.path.basename(sys.argv[0]). err))
+                return False
+            finally:
+                if fh is not None:
+                    fh.close()
 
 if __name__ == "__main__":
     ba = bytearray()
