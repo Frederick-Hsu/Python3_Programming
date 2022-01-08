@@ -41,10 +41,13 @@ import gzip
 import os
 import sys
 import struct
+import textwrap
 
 GZIP_MAGIC = b"\x1F\x8B"
 MAGIC = b"AIB\x00"
 FORMAT_VERSION = b"\x00\x01"
+
+NumbersStruct = struct.Struct("<Idi?")
 
 class IncidentError(Exception):
     pass
@@ -224,6 +227,91 @@ class Incident:
                 return True
             except (EnvironmentError, struct.error) as err:
                 print("{0}: pack error: {1}".format(os.path.basename(sys.argv[0]). err))
+                return False
+            finally:
+                if fh is not None:
+                    fh.close()
+        
+        def import_binary(self, filename):
+
+            def unpack_string(fh, eof_is_error = True):
+                uint16 = struct.Struct("<H")
+                length_data = fh.read(uint16.size)
+                if not length_data:
+                    if eof_is_error:
+                        raise ValueError("missing or corrupt string size")
+                    return None
+                length = uint16.unpack(length_data)[0]
+                if length == 0:
+                    return ""
+                data = fh.read(length)
+                if not data or len(data) != length:
+                    raise ValueError("missing or corrupt string")
+                format = "<{0}s".format(length)
+                return struct.unpack(format, data)[0].decode("utf8")
+            
+            fh = None
+            try:
+                fh = open(filename, "rb")
+                magic = fh.read(len(GZIP_MAGIC))
+                if magic == GZIP_MAGIC:
+                    fh.close()
+                    fh = gzip.open(filename, "rb")
+                else:
+                    fh.seek(0)
+                magic = fh.read(len(MAGIC))
+                if magic != MAGIC:
+                    raise ValueError("Invalid .aib file format")
+                version = fh.read(len(FORMAT_VERSION))
+                if version > FORMAT_VERSION:
+                    raise ValueError("Unrecognized .aib file version")
+                self.clear()
+                while True:
+                    report_id = unpack_string(fh, False)
+                    if report_id is None:
+                        break
+                    data = {}
+                    data["report_id"] = report_id
+                    for name in ("airport", "aircraft_id", "aircraft_type", "narrative"):
+                        data[name] = unpack_string(fh)
+                    other_data = fh.read(NumbersStruct.size)
+                    numbers = NumbersStruct.unpack(other_data)
+                    data["date"] = datetime.date.fromordinal(numbers[0])
+                    data["pilot_percent_hours_on_type"] = numbers[1]
+                    data["pilot_total_hours"] = numbers[2]
+                    data["midair"] = numbers[3]
+                    incident = Incident(**data)     # 映射拆分语法
+                    self[incident.report_id] = incident
+                return True
+            except (EnvironmentError, pickle.UnpicklingError) as err:
+                print("{0}: import binary error: {1}".format(os.path.basename(sys.argv[0]), err))
+                return False
+            finally:
+                if fh is not None:
+                    fh.close()
+        
+        def export_text(self, filename):
+            wrapper = textwrap.TextWrapper(initial_indent="    ", subsequent_indent="    ")
+            fh = None
+            try:
+                fh = open(filename, "w", encoding="utf8")
+                for incident in self.values():
+                    narrative = "\n".join(wrapper.wrap(incident.narrative.strip()))
+                    fh.write("[{0.report_id}]\n"
+                             "date={0.date!s}\n"
+                             "aircraft_id={0.aircraft_id}\n"
+                             "aircraft_type={0.aircraft_type}\n"
+                             "airport={airport}\n"
+                             "pilot_percent_hours_on_type={0.pilot_percent_hours_on_type}\n"
+                             "pilot_total_hours={0.pilot_total_hours}\n"
+                             "midair={0.midair:d}\n"
+                             ".NARRATIVE_START.\n"
+                             "{narrative}\n"
+                             ".NARRATIVE_END.\n\n".format(incident, 
+                                                          airport=incident.airport.strip(),
+                                                          narrative=narrative))
+                return True
+            except (EnvironmentError) as err:
                 return False
             finally:
                 if fh is not None:
